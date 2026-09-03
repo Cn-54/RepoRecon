@@ -10,7 +10,7 @@ def clear():
 def display_menu():
     clear()
     print("\n" + "=" * 50)
-    print("                 OSINT-TOOLS")
+    print("                 REPO-RECON")
     print("=" * 50)
 
     print("1. Repository Audit")
