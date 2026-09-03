@@ -40,7 +40,7 @@ Git must also be installed and available in your PATH.
 ## Files
 
 ```text
-OSINT-Tools/
+RepoRecon/
 ├── main.py
 ├── sites.txt
 ├── requirements.txt
