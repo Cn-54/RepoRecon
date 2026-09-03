@@ -32,7 +32,7 @@ A menu will appear allowing you to select the tool you want to use.
 ## Requirements
 
 ```bash
-pip install requests
+pip install -r requirements.txt
 ```
 
 Git must also be installed and available in your PATH.
