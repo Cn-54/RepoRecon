@@ -3,6 +3,9 @@ import sys
 import tempfile
 from pathlib import Path
 
+
+SITES_FILE = "sites.txt"
+
 def audit_repo(repo_url):
     authors = {}
 
@@ -82,15 +85,100 @@ def audit_repo(repo_url):
 
         print("\n")
 
+
+def load_sites():
+    sites = []
+
+    try:
+        with open(SITES_FILE, "r") as file:
+            for line in file:
+                line = line.strip()
+
+                if not line:
+                    continue
+
+                if line.startswith("#"):
+                    continue
+
+                sites.append(line)
+
+    except FileNotFoundError:
+        print(f"\n[!] {SITES_FILE} not found.")
+        return []
+
+    return sites
+
+
+def check_site(site, username):
+    url = site.format(username)
+
+    try:
+        response = requests.get(
+            url,
+            timeout=5,
+            headers={
+                "User-Agent": "Mozilla/5.0"
+            },
+            allow_redirects=True
+        )
+
+        if response.status_code != 200:
+            exists = False
+
+        else:
+            # Check whether username appears on page
+            exists = username.lower() in response.text.lower()
+
+        return exists, url
+
+    except requests.RequestException:
+        return False, url
+
+def reverse_name_search(target):
+    sites = load_sites()
+
+    if not sites:
+        print(f"no sites in {SITES_FILE}")
+
+    print("=" * 50)
+    print("REVERSE USERNAME SEARCH")
+    print("=" * 50)
+
+    print(f"Name: {username}")
+    print()
+
+    found = []
+
+    for site in sites:
+        exists, url = check_site(site, username)
+
+        if exists:
+            found.append(url)
+    if not found:
+        print("  No accounts found.")
+
+        print()
+
 def main():
-    if len(sys.argv) < 2:
+    if len(sys.argv) < 3:
         print("Usage:")
-        print("  python main.py <repository-url>")
+        print("  python main.py repo <repository-url>")
+        print("  python main.py username <username>")
+        print("  python main.py dual <repository-url>")
         return
 
-    target = sys.argv[1]
+    command = sys.argv[1]
+    target = sys.argv[2]
 
-    audit_repo(target)
+    if command == "repo":
+        audit_repo(target)
+    elif command == "username":
+        reverse_name_search(target)
+    elif command = "dual":
+        audit_repo(target)
+        reverse_name_search(target)
+    else:
+        print("command not recognised!")
 
 
 
