@@ -110,6 +110,7 @@ def load_sites():
 
 
 def check_site(site, username):
+    username = username.replace(" ", "")
     url = site.format(username)
 
     try:
@@ -174,7 +175,7 @@ def main():
         audit_repo(target)
     elif command == "username":
         reverse_name_search(target)
-    elif command = "dual":
+    elif command == "dual":
         audit_repo(target)
         reverse_name_search(target)
     else:
