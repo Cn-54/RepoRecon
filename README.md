@@ -43,6 +43,7 @@ Git must also be installed and available in your PATH.
 OSINT-Tools/
 ├── main.py
 ├── sites.txt
+├── requirments.txt
 └── tools/
     ├── repo_audit.py
     └── username_search.py
