@@ -1,6 +1,6 @@
-# OSINT-Tools
+# RepoRecon
 
-A simple Python CLI multitool for performing various OSINT tasks.
+A simple Python CLI multitool for performing GitHub repository reconnaissance and OSINT.
 
 ## Features
 
