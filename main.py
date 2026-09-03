@@ -1,3 +1,7 @@
+import subprocess
+import sys
+import tempfile
+from pathlib import Path
 
 def audit_repo(repo_url):
     authors = {}
@@ -64,7 +68,7 @@ def audit_repo(repo_url):
             print(f"Email: {email}" , end="")
 
             if email.endswith("@users.noreply.github.com"):
-                pass
+                print()
             else:
                 print(" [!] personal email")
 
@@ -79,7 +83,16 @@ def audit_repo(repo_url):
         print("\n")
 
 def main():
-    pass
+    if len(sys.argv) < 2:
+        print("Usage:")
+        print("  python main.py <repository-url>")
+        return
+
+    target = sys.argv[1]
+
+    audit_repo(target)
+
+
 
 if __name__ == "__main__":
     main()
