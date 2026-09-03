@@ -56,22 +56,24 @@ def reverse_name_search(username):
 
     if not sites:
         print(f"no sites in {SITES_FILE}")
+        return
 
     print("=" * 50)
     print("REVERSE USERNAME SEARCH")
     print("=" * 50)
-
     print(f"Name: {username}")
     print()
 
-    found = []
+    found = False
 
     for site in sites:
         exists, url = check_site(site, username)
 
         if exists:
-            found.append(url)
+            print(f"  {url}", flush=True)
+            found = True
+
     if not found:
         print("  No accounts found.")
 
-        print()
+    print()

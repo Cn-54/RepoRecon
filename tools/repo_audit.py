@@ -80,3 +80,4 @@ def audit_repo(repo_url):
         )
 
         print("\n")
+        return authors
