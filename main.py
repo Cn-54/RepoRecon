@@ -1,8 +1,14 @@
+import os
+
 from tools.repo_audit import audit_repo
 from tools.username_search import reverse_name_search
 
+def clear():
+    # 'cls' for Windows, 'clear' for macOS/Linux
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 def display_menu():
+    clear()
     print("\n" + "=" * 50)
     print("                 OSINT-TOOLS")
     print("=" * 50)
