@@ -1,4 +1,4 @@
-# RepoRecon
+# Repo-Recon
 
 A simple Python CLI multitool for performing GitHub repository reconnaissance and OSINT.
 
