@@ -1,0 +1,203 @@
+# ==========================================
+# Git Hosting / Development
+# ==========================================
+
+https://github.com/{}
+https://gitlab.com/{}
+https://codeberg.org/{}
+https://bitbucket.org/{}
+https://sourceforge.net/u/{}/profile/
+https://gitee.com/{}
+https://sr.ht/~{}
+https://git.sr.ht/~{}
+
+# ==========================================
+# Social Media
+# ==========================================
+
+https://www.instagram.com/{}
+https://www.tiktok.com/@{}
+https://x.com/{}
+https://www.facebook.com/{}
+https://www.snapchat.com/add/{}
+https://bsky.app/profile/{}.bsky.social
+https://threads.net/@{}
+https://mastodon.social/@{}
+https://www.threads.net/@{}
+https://www.pinterest.com/{}
+https://www.tumblr.com/{}
+https://www.quora.com/profile/{}
+https://www.meetup.com/members/{}
+
+# ==========================================
+# Video / Streaming
+# ==========================================
+
+https://www.youtube.com/@{}
+https://www.twitch.tv/{}
+https://vimeo.com/{}
+https://rumble.com/user/{}
+https://www.dailymotion.com/{}
+https://kick.com/{}
+https://www.bitchute.com/channel/{}
+https://odysee.com/@{}:1
+https://www.viddler.com/v/{}
+
+# ==========================================
+# Professional
+# ==========================================
+
+https://www.linkedin.com/in/{}
+https://www.fiverr.com/{}
+https://www.upwork.com/freelancers/~{}
+https://news.ycombinator.com/user?id={}
+https://angel.co/u/{}
+https://wellfound.com/u/{}
+https://www.crunchbase.com/person/{}
+
+# ==========================================
+# Forums / Communities
+# ==========================================
+
+https://www.reddit.com/user/{}
+https://news.ycombinator.com/user?id={}
+https://lobste.rs/u/{}
+https://dev.to/{}
+https://hashnode.com/@{}
+https://www.discourse.org/u/{}
+https://community.cloudflare.com/u/{}
+https://forums.tomshardware.com/members/{}
+https://forums.overclockers.co.uk/members/{}
+
+# ==========================================
+# Gaming
+# ==========================================
+
+https://steamcommunity.com/id/{}
+https://steamcommunity.com/groups/{}
+https://xboxgamertag.com/search/{}
+https://minecraftuuid.com/?search={}
+https://namemc.com/profile/{}
+https://lichess.org/@/{}
+https://www.chess.com/member/{}
+https://www.faceit.com/en/players/{}
+https://osu.ppy.sh/users/{}
+https://www.roblox.com/user.aspx?username={}
+https://fortnitetracker.com/profile/all/{}
+https://tracker.gg/valorant/profile/riot/{}/overview
+https://www.speedrun.com/users/{}
+
+# ==========================================
+# Art / Design
+# ==========================================
+
+https://dribbble.com/{}
+https://www.behance.net/{}
+https://www.redbubble.com/people/{}
+https://www.artstation.com/{}
+https://lottiefiles.com/{}
+https://www.deviantart.com/{}
+https://www.furaffinity.net/user/{}
+https://www.pixiv.net/en/users/{}
+https://www.patreon.com/{}
+https://ko-fi.com/{}
+
+# ==========================================
+# Blogging / Writing
+# ==========================================
+
+https://medium.com/@{}
+https://{}.wordpress.com/
+https://substack.com/@{}
+https://ghost.org/{}
+https://write.as/{}
+https://bearblog.dev/{}
+
+# ==========================================
+# Music
+# ==========================================
+
+https://open.spotify.com/user/{}
+https://soundcloud.com/{}
+https://bandcamp.com/{}
+https://www.last.fm/user/{}
+https://musicbrainz.org/user/{}
+https://www.mixcloud.com/{}
+https://audiomack.com/{}
+
+# ==========================================
+# Photography
+# ==========================================
+
+https://www.flickr.com/people/{}
+https://unsplash.com/@{}
+https://500px.com/p/{}
+https://www.pexels.com/@{}
+https://www.1x.com/photographer/{}
+
+# ==========================================
+# Software / Package Registries
+# ==========================================
+
+https://www.npmjs.com/~{}
+https://pypi.org/user/{}
+https://rubygems.org/profiles/{}
+https://hub.docker.com/u/{}
+https://crates.io/users/{}
+https://packagist.org/users/{}
+https://www.nuget.org/profiles/{}
+https://www.mojang.com/{}
+
+# ==========================================
+# Q&A / Developer Communities
+# ==========================================
+
+https://stackoverflow.com/users/{}
+https://stackexchange.com/users/{}
+https://superuser.com/users/{}
+https://askubuntu.com/users/{}
+https://serverfault.com/users/{}
+https://codepen.io/{}
+https://jsfiddle.net/user/{}
+https://replit.com/@{}
+https://www.codewars.com/users/{}
+https://exercism.org/profiles/{}
+
+# ==========================================
+# Education / Research
+# ==========================================
+
+https://www.kaggle.com/{}
+https://www.researchgate.net/profile/{}
+https://orcid.org/{}
+https://www.academia.edu/{}
+https://www.goodreads.com/user/show/{}
+
+# ==========================================
+# Shopping / Marketplaces
+# ==========================================
+
+https://www.ebay.co.uk/usr/{}
+https://www.etsy.com/shop/{}
+https://www.deviantart.com/{}
+
+# ==========================================
+# Crypto / Web3
+# ==========================================
+
+https://etherscan.io/address/{}
+https://opensea.io/{}
+https://mirror.xyz/{}
+https://lens.xyz/{}
+
+# ==========================================
+# Fitness / Lifestyle
+# ==========================================
+
+https://www.strava.com/athletes/{}
+https://www.myfitnesspal.com/profile/{}
+https://www.alltrails.com/members/{}
+
+# ==========================================
+# Add your own sites below
+# ==========================================
