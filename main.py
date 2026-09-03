@@ -2,6 +2,7 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
+import requests
 
 
 SITES_FILE = "sites.txt"
@@ -135,7 +136,7 @@ def check_site(site, username):
     except requests.RequestException:
         return False, url
 
-def reverse_name_search(target):
+def reverse_name_search(username):
     sites = load_sites()
 
     if not sites:
