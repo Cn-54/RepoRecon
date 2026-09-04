@@ -35,6 +35,10 @@ def main():
 
             if repo_url:
                 audit_repo(repo_url)
+            else:
+                print("[!] no URL passed")
+
+            input("\nPress Enter to continue...")
 
         elif choice == "2":
 
@@ -42,6 +46,10 @@ def main():
 
             if username:
                 reverse_name_search(username)
+            else:
+                print("[!] no username passed")
+
+            input("\nPress Enter to continue...")
 
         elif choice == "3":
 
@@ -49,8 +57,6 @@ def main():
 
             if repo_url:
                 authors = audit_repo(repo_url)
-
-                # Get unique names from repository
                 names = {
                     data["name"]
                     for data in authors.values()
@@ -58,6 +64,9 @@ def main():
 
                 for name in names:
                     reverse_name_search(name)
+            else:
+                print("[!] no URL passed")
+                input("\nPress Enter to continue...")
 
         elif choice == "4":
 
