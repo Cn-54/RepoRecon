@@ -11,10 +11,14 @@ def audit_repo(repo_url):
         print("\nCloning repository...")
 
         # clone repo into the temp dir
-        subprocess.run(
+        try:
+            subprocess.run(
                 ["git", "clone", "--quiet", repo_url, str(repo_path)],
                 check=True
             )
+        except subprocess.CalledProcessError:
+            print("[!] Failed to clone repository.")
+        return {}
 
         # runs git log and grabs the results
         result = subprocess.run(
