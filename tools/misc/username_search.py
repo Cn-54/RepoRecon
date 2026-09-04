@@ -52,9 +52,6 @@ def check_site(site, username):
     except requests.RequestException:
         return False, url, None
 
-    except requests.RequestException:
-        return False, url
-
 def reverse_name_search(username):
     sites = load_sites()
 
