@@ -38,7 +38,6 @@ def main():
             else:
                 print("[!] no URL passed")
 
-            input("\nPress Enter to continue...")
 
         elif choice == "2":
 
@@ -49,7 +48,6 @@ def main():
             else:
                 print("[!] no username passed")
 
-            input("\nPress Enter to continue...")
 
         elif choice == "3":
 
@@ -66,7 +64,6 @@ def main():
                     reverse_name_search(name)
             else:
                 print("[!] no URL passed")
-                input("\nPress Enter to continue...")
 
         elif choice == "4":
 
