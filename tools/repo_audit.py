@@ -27,7 +27,7 @@ def audit_repo(repo_url):
                 "-C",
                 str(repo_path),
                 "log",
-                "--format=%H|%an|%ae"
+                "--format=%H|%an|%ae|%aI"
             ],
             capture_output=True,
             text=True,
@@ -37,17 +37,28 @@ def audit_repo(repo_url):
         # splits the commit up into an array
         commits = result.stdout.strip().splitlines()
 
-        # goes through each commit and grabs unique emails and names and the number of commits
+        # goes through each commit and grabs unique emails, names,
+        # commit count, first commit and last commit
         for commit in commits:
-            commit_hash, name, email = commit.split("|", 2)
+
+            commit_hash, name, email, date = commit.split("|", 3)
 
             if email not in authors:
                 authors[email] = {
                     "name": name,
-                    "commits": 0
+                    "commits": 0,
+                    "first_commit": date,
+                    "last_commit": date
                 }
 
             authors[email]["commits"] += 1
+
+            # Update first and last commit dates
+            if date < authors[email]["first_commit"]:
+                authors[email]["first_commit"] = date
+
+            if date > authors[email]["last_commit"]:
+                authors[email]["last_commit"] = date
 
         # TemporaryDirectory automatically deletes
         # the cloned repository here.
@@ -76,6 +87,21 @@ def audit_repo(repo_url):
                 print(" [!] Non github email")
 
             print(f"Commit amount: {commit_count}")
+            print(f"First commit: {data["first_commit"]}")
+            print(f"Last commit: {data["last_commit"]}")
+        
+
+        print("\nAuthor Commit percentages:")
+        print("-" * 50)
+
+        for email, data in authors.items():
+            name = data["name"]
+            commit_count = data["commits"]
+            percentage = commit_count / len(commits) * 100
+
+            print(f"\nName: {name}")
+            print(f"Commits: {commit_count}")
+            print(f"Percentage: {percentage:.2f}%")
 
         # Search every unique author name
         unique_names = set(
