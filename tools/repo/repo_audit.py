@@ -1,6 +1,7 @@
 import subprocess
 import tempfile
 from pathlib import Path
+from tools.utils._clear_terminal import clear
 
 def audit_repo(repo_url):
     authors = {}
@@ -111,3 +112,14 @@ def audit_repo(repo_url):
 
         print("\n")
         return authors
+
+
+def run():
+    repo_url = input("\nEnter repository URL: ").strip()
+
+    if not repo_url:
+        print("[!] No repository URL provided.")
+        return
+
+    clear()
+    audit_repo(repo_url)

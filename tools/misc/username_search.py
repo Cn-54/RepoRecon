@@ -1,4 +1,5 @@
 import requests
+from tools.utils._clear_terminal import clear
 
 SITES_FILE = "sites.txt"
 
@@ -91,3 +92,15 @@ def reverse_name_search(username):
     print(f"Errors        : {error}")
 
     print()
+
+
+
+def run():
+    username = input("\nEnter username: ").strip()
+
+    if not username:
+        print("[!] No username provided.")
+        return
+
+    clear()
+    reverse_name_search(username)

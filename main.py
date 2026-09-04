@@ -1,94 +1,120 @@
-import os
+from pathlib import Path
+import importlib
+from tools.utils._clear_terminal import clear
 
-from tools.repo_audit import audit_repo
-from tools.username_search import reverse_name_search
-from tools.metadata_viewer import metadata_viewer
 
-def clear():
-    # 'cls' for Windows, 'clear' for macOS/Linux
-    os.system('cls' if os.name == 'nt' else 'clear')
+TOOLS_DIR = Path(__file__).parent / "tools"
 
-def display_menu():
+PAGES = {
+    "repo": "REPOSITORY TOOLS",
+    "user": "USER TOOLS",
+    "misc": "MISC"
+}
+
+
+
+
+# gets a list of tools in the given category
+def get_tools(category):
+    tool_dir = TOOLS_DIR / category
+    tools = []
+
+    if not tool_dir.exists():
+        return tools
+
+    for file in sorted(tool_dir.glob("*.py")):
+
+        # skip helper modules
+        if file.name.startswith("_"):
+            continue
+
+        module_name = f"tools.{category}.{file.stem}"
+
+        try:
+            module = importlib.import_module(module_name)
+        except Exception as e:
+            print(f" [!] Failed to load {file.name}: {e}")
+            continue
+
+        # Only include files that have a run() function
+        if hasattr(module, "run"):
+            tools.append((file.stem, module))
+
+    return tools
+
+# formats the file name into the tool name 
+def format_name(filename):
+    return filename.replace("_", " ").title()
+
+# shows the current page
+def show_page(category):
     clear()
+    tools = get_tools(category)
+
     print("\n" + "=" * 50)
-    print("                 REPO-RECON")
+    print(" " * 18 + "REPO-RECON")
+    print(" " * 13 + PAGES[category])
     print("=" * 50)
 
-    print("1. Repository Audit")
-    print("2. Repository metadata viewer")
-    print("3. Username Search")
-    print("4. Repository + Username Search")
-    print("5. Exit")
+    if not tools:
+        print("\nNo tools available.")
 
+    else:
+        for number, (name, _) in enumerate(tools, 1):
+            print(f"{number}. {format_name(name)}")
+
+    print("\n" + "-" * 50)
+    print("[N] Next Page    [P] Previous Page    [Q] Quit")
     print("=" * 50)
 
+    return tools
 
-def main():
+def run_menu():
+    pages = list(PAGES.keys())
+    current_page = 0
 
     while True:
+        category = pages[current_page]
+        tools = show_page(category)
 
-        display_menu()
+        choice = input("Select an option: ").strip().lower()
 
-        choice = input("Select an option: ").strip()
-
-        if choice == "1":
-
-            repo_url = input("\nEnter repository URL: ").strip()
-            
-            if repo_url:
-                clear()
-                audit_repo(repo_url)
-            else:
-                print("[!] no URL passed")
-
-        elif choice == "2":
-
-            repo_url = input("\nEnter repository URL: ").strip()
-
-            if repo_url:
-                clear()
-                metadata_viewer(repo_url)
-            else:
-                print("[!] no URL passed")
-
-        elif choice == "3":
-
-            username = input("\nEnter username: ").strip()
-
-            if username:
-                clear()
-                reverse_name_search(username)
-            else:
-                print("[!] no username passed")
-
-
-        elif choice == "4":
-
-            repo_url = input("\nEnter repository URL: ").strip()
-
-            if repo_url:
-                clear()
-                authors = audit_repo(repo_url)
-                names = {
-                    data["name"]
-                    for data in authors.values()
-                }
-
-                for name in names:
-                    reverse_name_search(name)
-            else:
-                print("[!] no URL passed")
-
-        elif choice == "5":
-
-            print("\nExiting...")
+        # Quit
+        if choice == "q":
+            print("\nGoodbye.")
             break
 
-        else:
-            print("\n[!] Invalid option.")
+        # Next page
+        elif choice == "n":
+            current_page = (current_page + 1) % len(pages)
 
-        input("\nPress Enter to continue...")
+        # Previous page
+        elif choice == "p":
+            current_page = (current_page - 1) % len(pages)
+
+        # Tool selection
+        elif choice.isdigit():
+
+            number = int(choice)
+
+            if 1 <= number <= len(tools):
+                _, module = tools[number - 1]
+
+                try:
+                    module.run()
+                except KeyboardInterrupt:
+                    print("\n\n[!] Tool interrupted.")
+                except Exception as e:
+                    print(f"\n[!] Tool error: {e}")
+
+                input("\nPress Enter to continue...")
+
+            else:
+                print("[!] Invalid option.")
+
+        else:
+            print("[!] Invalid option.")
 
 
 if __name__ == "__main__":
-    main()
+    run_menu()

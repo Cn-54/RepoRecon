@@ -1,4 +1,5 @@
 import requests
+from tools.utils._clear_terminal import clear
 
 def metadata_viewer(URL):
     repo = URL.rstrip("/").removesuffix(".git")
@@ -80,3 +81,14 @@ def metadata_viewer(URL):
     print()
 
     return data
+
+
+def run():
+    repo_url = input("\nEnter repository URL: ").strip()
+
+    if not repo_url:
+        print("[!] No repository URL provided.")
+        return
+
+    clear()
+    metadata_viewer(repo_url)
