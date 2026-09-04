@@ -9,7 +9,6 @@ https://bitbucket.org/{}
 https://sourceforge.net/u/{}/profile/
 https://gitee.com/{}
 https://sr.ht/~{}
-https://git.sr.ht/~{}
 
 # ==========================================
 # Social Media
@@ -23,7 +22,6 @@ https://www.snapchat.com/add/{}
 https://bsky.app/profile/{}.bsky.social
 https://threads.net/@{}
 https://mastodon.social/@{}
-https://www.threads.net/@{}
 https://www.pinterest.com/{}
 https://www.tumblr.com/{}
 https://www.quora.com/profile/{}
@@ -60,11 +58,9 @@ https://www.crunchbase.com/person/{}
 # ==========================================
 
 https://www.reddit.com/user/{}
-https://news.ycombinator.com/user?id={}
 https://lobste.rs/u/{}
 https://dev.to/{}
 https://hashnode.com/@{}
-https://www.discourse.org/u/{}
 https://community.cloudflare.com/u/{}
 https://forums.tomshardware.com/members/{}
 https://forums.overclockers.co.uk/members/{}
@@ -146,7 +142,6 @@ https://hub.docker.com/u/{}
 https://crates.io/users/{}
 https://packagist.org/users/{}
 https://www.nuget.org/profiles/{}
-https://www.mojang.com/{}
 
 # ==========================================
 # Q&A / Developer Communities
@@ -179,7 +174,6 @@ https://www.goodreads.com/user/show/{}
 
 https://www.ebay.co.uk/usr/{}
 https://www.etsy.com/shop/{}
-https://www.deviantart.com/{}
 
 # ==========================================
 # Crypto / Web3
