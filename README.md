@@ -9,11 +9,16 @@ A simple Python CLI multitool for performing GitHub repository reconnaissance an
   * Extracts commit information
   * Finds unique authors and emails
   * Counts commits per author
-  * Flags potential personal emails
+  * Shows first and last commit dates
+  * Shows commit percentage per author
+  * Flags non-GitHub emails
+
 * Reverse username searching
 
   * Checks usernames across multiple websites
+  * Shows found, not found and error results
   * Sites can be added or removed through `sites.txt`
+
 * Repository + username search
 
   * Extracts author names from a repository
