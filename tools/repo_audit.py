@@ -18,7 +18,7 @@ def audit_repo(repo_url):
             )
         except subprocess.CalledProcessError:
             print("[!] Failed to clone repository.")
-        return {}
+            return {}
 
         # runs git log and grabs the results
         result = subprocess.run(
