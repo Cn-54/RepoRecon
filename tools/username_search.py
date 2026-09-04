@@ -48,6 +48,8 @@ def check_site(site, username):
             exists = username.lower() in response.text.lower()
 
         return exists, url, response.status_code
+    except requests.RequestException:
+        return False, url, None
 
     except requests.RequestException:
         return False, url
