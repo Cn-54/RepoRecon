@@ -42,11 +42,12 @@ def check_site(site, username):
         if response.status_code != 200:
             exists = False
 
+
         else:
             # Check whether username appears on page
             exists = username.lower() in response.text.lower()
 
-        return exists, url
+        return exists, url, response.status_code
 
     except requests.RequestException:
         return False, url
@@ -64,16 +65,27 @@ def reverse_name_search(username):
     print(f"Name: {username}")
     print()
 
-    found = False
+    found = 0
+    not_found = 0
+    error = 0
 
     for site in sites:
-        exists, url = check_site(site, username)
+        exists, url, code = check_site(site, username)
 
         if exists:
-            print(f"  {url}", flush=True)
-            found = True
+            print(f"  [+] {url}", flush=True)
+            found += 1
+        elif code == 404:
+            not_found += 1
+        else:
+            error += 1
 
-    if not found:
-        print("  No accounts found.")
+    print("\n" + "-" * 50)
+    print("Search complete")
+    print("-" * 50)
+    print(f"Sites checked : {len(sites)}")
+    print(f"Accounts found: {found}")
+    print(f"Not found     : {not_found}")
+    print(f"Errors        : {error}")
 
     print()
