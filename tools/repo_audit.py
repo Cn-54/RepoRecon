@@ -73,7 +73,7 @@ def audit_repo(repo_url):
             if email.endswith("@users.noreply.github.com"):
                 print()
             else:
-                print(" [!] personal email")
+                print(" [!] Non github email")
 
             print(f"Commit amount: {commit_count}")
 
