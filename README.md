@@ -2,46 +2,11 @@
 
 A simple Python CLI multitool for performing GitHub repository reconnaissance and OSINT.
 
-## Features
+## Documentation
 
-* Repository auditing
-
-  * Extracts commit information
-  * Finds unique authors and emails
-  * Counts commits per author
-  * Shows first and last commit dates
-  * Shows commit percentage per author
-  * Flags non-GitHub emails
-
-* Repository metadata
-
-  * Gets repository information through the GitHub API
-  * Displays repository owner and description
-  * Shows repository visibility and default branch
-  * Shows stars, forks, issues and watchers
-  * Shows repository language and license
-  * Shows creation, update and push dates
-  * Displays repository topics
-
-* Reverse username searching
-
-  * Checks usernames across multiple websites
-  * Shows found, not found and error results
-  * Sites can be added or removed through `sites.txt`
-
-* User relationship graphing
-
-  * Builds graphs from GitHub followers and following
-  * Supports configurable graph depth and connections
-  * Displays user information on graph nodes
-  * Generates interactive HTML graphs
-
-* Mutual relationship graphing
-
-  * Finds mutual followers and following
-  * Supports configurable graph depth and connections
-  * Displays user information on graph nodes
-  * Generates interactive HTML graphs
+* [Repository Tools](repos.md)
+* [User Tools](users.md)
+* [Miscellaneous Tools](misc.md)
 
 ## Usage
 
