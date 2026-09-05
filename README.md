@@ -4,9 +4,9 @@ A simple Python CLI multitool for performing GitHub repository reconnaissance an
 
 ## Documentation
 
-* [Repository Tools](repos.md)
-* [User Tools](users.md)
-* [Miscellaneous Tools](misc.md)
+* [Repository Tools](docs/repos.md)
+* [User Tools](docs/users.md)
+* [Miscellaneous Tools](docs/misc.md)
 
 ## Usage
 
