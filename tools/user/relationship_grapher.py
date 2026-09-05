@@ -1,5 +1,5 @@
 import networkx as nx
-from graphviz import Graph
+from pyvis.network import Network
 from pathlib import Path
 from collections import deque
 import requests
@@ -191,51 +191,75 @@ def build_graph(
 
     return graph
 
-
 def render_graph(graph, username):
 
-    dot = Graph(
-        name=f"{username}-connections",
-        format="png"
-    )
-
     output_dir = Path("outputs")
+    output_dir.mkdir(exist_ok=True)
 
-    output_dir.mkdir(
-        exist_ok=True
+    output_file = output_dir / f"{username}-connections.html"
+
+    net = Network(
+        height="900px",
+        width="100%",
+        bgcolor="#222222",
+        font_color="white",
+        directed=False
     )
 
     for node, data in graph.nodes(data=True):
 
-        label = (
-            f"{node}\n"
-            f"Email: {data['email']}\n"
-            f"Public repos: {data['public_repos']}\n"
-            f"Followers: {data['followers']}\n"
-            f"Following: {data['following']}"
+        email = data.get("email", "N/A")
+        public_repos = data.get("public_repos", "N/A")
+        followers = data.get("followers", "N/A")
+        following = data.get("following", "N/A")
+
+        title = (
+            f"<b>{node}</b><br>"
+            f"Email: {email}<br>"
+            f"Public repos: {public_repos}<br>"
+            f"Followers: {followers}<br>"
+            f"Following: {following}"
         )
 
-        dot.node(
+        net.add_node(
             node,
-            label=label,
+            label=node,
+            title=title,
             shape="box"
         )
 
     for user_a, user_b in graph.edges():
+        net.add_edge(user_a, user_b)
 
-        dot.edge(
-            user_a,
-            user_b
-        )
+    net.set_options("""
+    {
+        "physics": {
+            "enabled": true,
+            "stabilization": {
+                "iterations": 1000
+            },
+            "barnesHut": {
+                "gravitationalConstant": -3000,
+                "centralGravity": 0.2,
+                "springLength": 150,
+                "springConstant": 0.04,
+                "damping": 0.09
+            }
+        },
+        "interaction": {
+            "hover": true,
+            "navigationButtons": true,
+            "keyboard": true
+        }
+    }
+    """)
 
-    output_path = output_dir / f"{username}-connections"
-
-    dot.render(
-        filename=str(output_path),
-        cleanup=True
+    net.write_html(
+        str(output_file),
+        open_browser=False
     )
 
-    return f"{output_path}.png"
+    print(f"[+] Graph saved to {output_file}")
 
 
 def run():
