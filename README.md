@@ -60,23 +60,32 @@ A GitHub API token is required for the repository metadata and user graphing too
 
 ```text
 RepoRecon/
-├── main.py
-├── sites.txt
-├── requirements.txt
+├── LICENSE
 ├── README.md
-├── .env
+├── docs/
+│   ├── misc/
+│   │   └── username_search.md
+│   ├── misc_tools.md
+│   ├── repo/
+│   │   ├── metadata_viewer.md
+│   │   └── repo_audit.md
+│   ├── repo_tools.md
+│   ├── user/
+│   │   ├── mutuals_grapher.md
+│   │   └── relationship_grapher.md
+│   └── user_tools.md
+├── main.py
+├── requirements.txt
+├── sites.txt
 └── tools/
+    ├── misc/
+    │   └── username_search.py
     ├── repo/
-    │   ├── repo_audit.py
-    │   └── metadata_viewer.py
-    │
+    │   ├── metadata_viewer.py
+    │   └── repo_audit.py
     ├── user/
     │   ├── mutuals_grapher.py
     │   └── relationship_grapher.py
-    │
-    ├── misc/
-    │   └── username_search.py
-    │
     └── utils/
         └── _clear_terminal.py
 ```
