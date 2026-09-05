@@ -5,7 +5,7 @@ import os
 
 load_dotenv()
 
-GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+GITHUB_TOKEN = os.getenv("GITHUB_API_TOKEN")
 
 
 def metadata_viewer(URL):
