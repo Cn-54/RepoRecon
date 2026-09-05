@@ -150,7 +150,7 @@ def build_graph(target, max_depth, max_connections):
 def render_graph(graph, username):
 
     dot = Graph(
-        name=f"{username}-connections",
+        name=f"{username}-mutuals",
         format="png"
     )
 
