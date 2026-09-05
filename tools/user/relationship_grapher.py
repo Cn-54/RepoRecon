@@ -53,7 +53,8 @@ def get_user_data(username):
 
 def get_connections(username):
 
-    connections = set()
+    followers_set = set()
+    following_set = set()
 
     followers_url = (
         f"https://api.github.com/users/{username}/followers"
@@ -83,11 +84,11 @@ def get_connections(username):
             f"[!] Connection request error for "
             f"{username}: {error}"
         )
-        return []
+        return set(), set()
 
     if followers.status_code == 200:
         for user in followers.json():
-            connections.add(user["login"])
+            followers_set.add(user["login"])
     else:
         print(
             f"[!] Followers API error for {username}: "
@@ -96,15 +97,14 @@ def get_connections(username):
 
     if following.status_code == 200:
         for user in following.json():
-            connections.add(user["login"])
+            following_set.add(user["login"])
     else:
         print(
             f"[!] Following API error for {username}: "
             f"{following.status_code}"
         )
 
-    return list(connections)
-
+    return followers_set, following_set
 
 def add_user_to_graph(graph, username):
 
@@ -123,7 +123,6 @@ def add_user_to_graph(graph, username):
     )
 
     return True
-
 
 def traverse_graph(
     graph,
@@ -158,15 +157,38 @@ def traverse_graph(
         if depth >= max_depth:
             continue
 
-        connections = get_connections(username)
+        followers, following = get_connections(username)
+
+        connections = followers | following
 
         for connection in connections:
-            graph.add_edge(
-                username,
-                connection
-            )
 
-        for connection in connections[:max_connections]:
+            if connection in following and connection in followers:
+
+                graph.add_edge(
+                    username,
+                    connection,
+                    relationship="mutual"
+                )
+
+            elif connection in following:
+
+                graph.add_edge(
+                    username,
+                    connection,
+                    relationship="following"
+                )
+
+            else:
+
+                graph.add_edge(
+                    username,
+                    connection,
+                    relationship="follower"
+                )
+
+
+        for connection in list(connections)[:max_connections]:
 
             if connection not in visited:
 
@@ -180,7 +202,7 @@ def build_graph(
     max_depth,
     max_connections
 ):
-    graph = nx.Graph()
+    graph = nx.DiGraph()
 
     traverse_graph(
         graph,
@@ -228,8 +250,40 @@ def render_graph(graph, username):
             shape="box"
         )
 
-    for user_a, user_b in graph.edges():
-        net.add_edge(user_a, user_b)
+    for user_a, user_b, data in graph.edges(data=True):
+
+        relationship = data.get(
+            "relationship",
+            "following"
+        )
+
+        if relationship == "mutual":
+
+            net.add_edge(
+                user_a,
+                user_b,
+                arrows="to;from",
+                title="Mutual",
+                width=4
+            )
+
+        elif relationship == "following":
+
+            net.add_edge(
+                user_a,
+                user_b,
+                arrows="to",
+                title="Follows"
+            )
+
+        elif relationship == "follower":
+
+            net.add_edge(
+                user_a,
+                user_b,
+                arrows="from",
+                title="Follows you"
+            )
 
     net.set_options("""
     {
