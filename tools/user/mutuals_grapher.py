@@ -1,14 +1,22 @@
 import networkx as nx
+
 from graphviz import Graph
+
 from pathlib import Path
+
 from collections import deque
+
 import requests
+
 from dotenv import load_dotenv
+
 import os
+
 
 load_dotenv()
 
 GITHUB_TOKEN = os.getenv("GITHUB_API_TOKEN")
+
 
 def get_user_data(username):
 
@@ -26,7 +34,7 @@ def get_user_data(username):
     )
 
     if response.status_code != 200:
-        print(f" [!] GitHub API error: {response.status_code}")
+        print(f"[!] GitHub API error: {response.status_code}")
         print(response.text)
         return None
 
@@ -41,9 +49,8 @@ def get_user_data(username):
         "following": data["following"]
     }
 
-def get_connections(username):
 
-    connections = set()
+def get_mutuals(username):
 
     headers = {
         "Authorization": f"Bearer {GITHUB_TOKEN}",
@@ -67,43 +74,57 @@ def get_connections(username):
         timeout=10
     )
 
-    if followers.status_code == 200:
-        for user in followers.json():
-            connections.add(user["login"])
-    else:
-        print(f"[!] Followers API error for {username}: {followers.status_code}")
+    if followers.status_code != 200:
+        print(
+            f"[!] Followers API error for {username}: "
+            f"{followers.status_code}"
+        )
+        return []
 
-    if following.status_code == 200:
-        for user in following.json():
-            connections.add(user["login"])
-    else:
-        print(f"[!] Following API error for {username}: {following.status_code}")
+    if following.status_code != 200:
+        print(
+            f"[!] Following API error for {username}: "
+            f"{following.status_code}"
+        )
+        return []
 
-    return list(connections)
+    follower_names = {
+        user["login"]
+        for user in followers.json()
+    }
+
+    following_names = {
+        user["login"]
+        for user in following.json()
+    }
+
+    mutuals = follower_names & following_names
+
+    return list(mutuals)
 
 
 def traverse_graph(graph, target, max_depth, max_connections):
 
     queue = deque()
+
     visited = set()
 
-    # target starts at depth 0
     queue.append((target, 0))
 
     while queue:
 
         username, depth = queue.popleft()
 
-        # Dont process the same user twice
         if username in visited:
             continue
 
         visited.add(username)
 
-        # get information about this user
         user_data = get_user_data(username)
 
-        # add the user to the graph
+        if user_data is None:
+            continue
+
         graph.add_node(
             username,
             email=user_data["email"],
@@ -113,24 +134,25 @@ def traverse_graph(graph, target, max_depth, max_connections):
             following=user_data["following"]
         )
 
-        # dont expand users at the maximum depth
         if depth >= max_depth:
             continue
 
-        # get this users connections
-        connections = get_connections(username)
+        mutuals = get_mutuals(username)
 
-        # limit how many connections we follow
-        connections = connections[:max_connections]
+        mutuals = mutuals[:max_connections]
 
-        for connection in connections:
+        for mutual in mutuals:
 
-            # add the connection to the graph
-            graph.add_edge(username, connection)
+            graph.add_edge(
+                username,
+                mutual
+            )
 
-            # add the connection to the queue
-            if connection not in visited:
-                queue.append((connection, depth + 1))
+            if mutual not in visited:
+
+                queue.append(
+                    (mutual, depth + 1)
+                )
 
 
 def build_graph(target, max_depth, max_connections):
@@ -154,11 +176,12 @@ def render_graph(graph, username):
         format="png"
     )
 
-    # create output directory
     output_dir = Path("outputs")
-    output_dir.mkdir(exist_ok=True)
 
-    # add nodes
+    output_dir.mkdir(
+        exist_ok=True
+    )
+
     for node, data in graph.nodes(data=True):
 
         label = (
@@ -175,7 +198,6 @@ def render_graph(graph, username):
             shape="box"
         )
 
-    # add relationships
     for user_a, user_b in graph.edges():
 
         dot.edge(
@@ -183,20 +205,29 @@ def render_graph(graph, username):
             user_b
         )
 
-    # render to outputs/<username>.png
     dot.render(
-        filename=str(output_dir / username),
+        filename=str(
+            output_dir / f"{username}-mutuals"
+        ),
         cleanup=True
     )
 
 
 def run():
 
-    username = input("GitHub username: ")
+    username = input(
+        "GitHub username: "
+    )
 
-    depth = int(input("Maximum depth: "))
+    depth = int(
+        input("Maximum depth: ")
+    )
 
-    connections = int(input("Maximum connections per account: "))
+    connections = int(
+        input(
+            "Maximum mutuals per account: "
+        )
+    )
 
     graph = build_graph(
         username,
@@ -210,6 +241,5 @@ def run():
     )
 
     print(
-        f"Graph saved to outputs/{username}.png"
+        f"Graph saved to outputs/{username}-mutuals.png"
     )
-

@@ -183,9 +183,9 @@ def render_graph(graph, username):
             user_b
         )
 
-    # render to outputs/<username>.png
+    # render to outputs/<username>-connections.png
     dot.render(
-        filename=str(output_dir / username),
+        filename=str(output_dir / f"{username}-connections"),
         cleanup=True
     )
 
@@ -210,6 +210,6 @@ def run():
     )
 
     print(
-        f"Graph saved to outputs/{username}.png"
+        f"Graph saved to outputs/{username}-connections.png"
     )
 
