@@ -1,15 +1,9 @@
 import networkx as nx
-
 from graphviz import Graph
-
 from pathlib import Path
-
 from collections import deque
-
 import requests
-
 from dotenv import load_dotenv
-
 import os
 
 
@@ -17,25 +11,33 @@ load_dotenv()
 
 GITHUB_TOKEN = os.getenv("GITHUB_API_TOKEN")
 
+HEADERS = {
+    "Authorization": f"Bearer {GITHUB_TOKEN}",
+    "Accept": "application/vnd.github+json"
+}
+
 
 def get_user_data(username):
-
     url = f"https://api.github.com/users/{username}"
 
-    headers = {
-        "Authorization": f"Bearer {GITHUB_TOKEN}",
-        "Accept": "application/vnd.github+json"
-    }
-
-    response = requests.get(
-        url,
-        headers=headers,
-        timeout=10
-    )
+    try:
+        response = requests.get(
+            url,
+            headers=HEADERS,
+            timeout=10
+        )
+    except requests.RequestException as error:
+        print(
+            f"[!] Request error for {username}: "
+            f"{error}"
+        )
+        return None
 
     if response.status_code != 200:
-        print(f"[!] GitHub API error: {response.status_code}")
-        print(response.text)
+        print(
+            f"[!] GitHub API error for {username}: "
+            f"{response.status_code}"
+        )
         return None
 
     data = response.json()
@@ -52,40 +54,55 @@ def get_user_data(username):
 
 def get_mutuals(username):
 
-    headers = {
-        "Authorization": f"Bearer {GITHUB_TOKEN}",
-        "Accept": "application/vnd.github+json"
-    }
-
-    followers_url = f"https://api.github.com/users/{username}/followers"
-    following_url = f"https://api.github.com/users/{username}/following"
-
-    followers = requests.get(
-        followers_url,
-        headers=headers,
-        params={"per_page": 100},
-        timeout=10
+    followers_url = (
+        f"https://api.github.com/users/{username}/followers"
     )
 
-    following = requests.get(
-        following_url,
-        headers=headers,
-        params={"per_page": 100},
-        timeout=10
+    following_url = (
+        f"https://api.github.com/users/{username}/following"
     )
+
+    try:
+
+        followers = requests.get(
+            followers_url,
+            headers=HEADERS,
+            params={"per_page": 100},
+            timeout=10
+        )
+
+        following = requests.get(
+            following_url,
+            headers=HEADERS,
+            params={"per_page": 100},
+            timeout=10
+        )
+
+    except requests.RequestException as error:
+
+        print(
+            f"[!] Connection request error for "
+            f"{username}: {error}"
+        )
+
+        return []
 
     if followers.status_code != 200:
+
         print(
             f"[!] Followers API error for {username}: "
             f"{followers.status_code}"
         )
+
         return []
 
     if following.status_code != 200:
+
         print(
             f"[!] Following API error for {username}: "
             f"{following.status_code}"
         )
+
         return []
 
     follower_names = {
@@ -103,13 +120,39 @@ def get_mutuals(username):
     return list(mutuals)
 
 
-def traverse_graph(graph, target, max_depth, max_connections):
+def add_user_to_graph(graph, username):
+
+    user_data = get_user_data(username)
+
+    if user_data is None:
+        return False
+
+    graph.add_node(
+        username,
+        email=user_data["email"],
+        links=user_data["links"],
+        public_repos=user_data["public_repos"],
+        followers=user_data["followers"],
+        following=user_data["following"]
+    )
+
+    return True
+
+
+def traverse_graph(
+    graph,
+    target,
+    max_depth,
+    max_connections
+):
 
     queue = deque()
 
     visited = set()
 
-    queue.append((target, 0))
+    queue.append(
+        (target, 0)
+    )
 
     while queue:
 
@@ -120,33 +163,32 @@ def traverse_graph(graph, target, max_depth, max_connections):
 
         visited.add(username)
 
-        user_data = get_user_data(username)
-
-        if user_data is None:
-            continue
-
-        graph.add_node(
-            username,
-            email=user_data["email"],
-            links=user_data["links"],
-            public_repos=user_data["public_repos"],
-            followers=user_data["followers"],
-            following=user_data["following"]
+        print(
+            f"[*] Processing {username} "
+            f"(depth {depth})"
         )
+
+        if not add_user_to_graph(
+            graph,
+            username
+        ):
+            continue
 
         if depth >= max_depth:
             continue
 
         mutuals = get_mutuals(username)
 
-        mutuals = mutuals[:max_connections]
-
+        # Add ALL mutual relationships discovered
+        # for this account.
         for mutual in mutuals:
 
             graph.add_edge(
                 username,
                 mutual
             )
+
+        for mutual in mutuals[:max_connections]:
 
             if mutual not in visited:
 
@@ -155,7 +197,11 @@ def traverse_graph(graph, target, max_depth, max_connections):
                 )
 
 
-def build_graph(target, max_depth, max_connections):
+def build_graph(
+    target,
+    max_depth,
+    max_connections
+):
 
     graph = nx.Graph()
 
@@ -205,19 +251,21 @@ def render_graph(graph, username):
             user_b
         )
 
+    output_path = output_dir / f"{username}-mutuals"
+
     dot.render(
-        filename=str(
-            output_dir / f"{username}-mutuals"
-        ),
+        filename=str(output_path),
         cleanup=True
     )
+
+    return f"{output_path}.png"
 
 
 def run():
 
     username = input(
         "GitHub username: "
-    )
+    ).strip()
 
     depth = int(
         input("Maximum depth: ")
@@ -235,11 +283,20 @@ def run():
         connections
     )
 
-    render_graph(
+    output = render_graph(
         graph,
         username
     )
 
     print(
-        f"Graph saved to outputs/{username}-mutuals.png"
+        f"\n[+] Graph saved to {output}"
+    )
+
+    print(
+        f"[+] Nodes: {graph.number_of_nodes()}"
+    )
+
+    print(
+        f"[+] Mutual relationships: "
+        f"{graph.number_of_edges()}"
     )
