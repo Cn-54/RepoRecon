@@ -1,5 +1,12 @@
 import requests
 from tools.utils._clear_terminal import clear
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+
 
 def metadata_viewer(URL):
     repo = URL.rstrip("/").removesuffix(".git")
@@ -25,6 +32,7 @@ def metadata_viewer(URL):
         response = requests.get(
             api_url,
             headers={
+                "Authorization": f"Bearer {GITHUB_TOKEN}",
                 "Accept": "application/vnd.github+json"
             },
             timeout=10

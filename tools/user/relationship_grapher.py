@@ -3,12 +3,27 @@ from graphviz import Graph
 from pathlib import Path
 from collections import deque
 import requests
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 
 def get_user_data(username):
 
     url = f"https://api.github.com/users/{username}"
 
-    response = requests.get(url)
+    headers = {
+        "Authorization": f"Bearer {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github+json"
+    }
+
+    response = requests.get(
+        url,
+        headers=headers,
+        timeout=10
+    )
 
     if response.status_code != 200:
         print(f" [!] GitHub API error: {response.status_code}")
