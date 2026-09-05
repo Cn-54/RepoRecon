@@ -41,31 +41,43 @@ def get_user_data(username):
         "following": data["following"]
     }
 
-
 def get_connections(username):
 
     connections = set()
+
+    headers = {
+        "Authorization": f"Bearer {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github+json"
+    }
 
     followers_url = f"https://api.github.com/users/{username}/followers"
     following_url = f"https://api.github.com/users/{username}/following"
 
     followers = requests.get(
         followers_url,
-        params={"per_page": 100}
+        headers=headers,
+        params={"per_page": 100},
+        timeout=10
     )
 
     following = requests.get(
         following_url,
-        params={"per_page": 100}
+        headers=headers,
+        params={"per_page": 100},
+        timeout=10
     )
 
     if followers.status_code == 200:
         for user in followers.json():
             connections.add(user["login"])
+    else:
+        print(f"[!] Followers API error for {username}: {followers.status_code}")
 
     if following.status_code == 200:
         for user in following.json():
             connections.add(user["login"])
+    else:
+        print(f"[!] Following API error for {username}: {following.status_code}")
 
     return list(connections)
 
