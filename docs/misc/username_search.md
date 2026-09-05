@@ -106,3 +106,5 @@ pip install -r requirements.txt
 This tool is intended for educational purposes and legitimate OSINT research.
 
 Only use RepoRecon against accounts and information that you are authorised to investigate.
+
+[Back to Miscellaneous Tools](../misc_tools.md)
